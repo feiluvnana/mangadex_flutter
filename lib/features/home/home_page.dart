@@ -33,8 +33,11 @@ class _HomePageState extends ConsumerState<HomePage> {
   @override
   void initState() {
     super.initState();
-    _pageController = PageController(initialPage: widget.initialTab ?? 0);
-    currentIndex = widget.initialTab ?? 0;
+    int appliedInitialTab = widget.initialTab ?? 0;
+    if (appliedInitialTab > 3) appliedInitialTab = 3;
+    if (appliedInitialTab < 0) appliedInitialTab = 0;
+    _pageController = PageController(initialPage: appliedInitialTab);
+    currentIndex = appliedInitialTab;
   }
 
   @override
@@ -42,7 +45,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     return Scaffold(
         body: PageView(
             controller: _pageController,
-            children: [Text("1"), Text("2"), Text("3"), MorePage()]),
+            children: const [Text("1"), Text("2"), Text("3"), MorePage()]),
         bottomNavigationBar: BottomNavigationBar(
             currentIndex: currentIndex,
             onTap: (value) {

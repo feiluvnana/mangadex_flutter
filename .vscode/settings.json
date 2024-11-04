@@ -1,0 +1,20 @@
+{
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": "always"
+    },
+    "editor.fontWeight": "500",
+    "editor.formatOnSave": true,
+    "editor.guides.indentation": false,
+    "editor.rulers": [
+        100
+    ],
+    "explorer.fileNesting.enabled": true,
+    "explorer.fileNesting.expand": false,
+    "explorer.fileNesting.patterns": {
+        "pubspec.yaml": "pubspec.lock, analysis_options.yaml, .flutter-plugins, .flutter-plugins-dependencies, .metadata",
+        "*.dart": "${capture}.g.dart, ${capture}.freezed.dart"
+    },
+    "fonted.font": "Inter",
+    "dart.lineLength": 100,
+    "dart.previewFlutterUiGuides": true
+}
