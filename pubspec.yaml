@@ -1,0 +1,31 @@
+name: mangadex_flutter
+description: "A new Flutter project."
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: ^3.5.4
+
+dependencies:
+  dio: ^5.7.0
+  flutter:
+    sdk: flutter
+  flutter_riverpod: ^2.6.1
+  freezed_annotation: ^2.4.4
+  google_fonts: ^6.2.1
+  infinite_scroll_pagination: ^4.0.0
+  json_annotation: ^4.9.0
+  retrofit: ^4.4.1
+  shared_preferences: ^2.3.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+  freezed: ^2.5.7
+  json_serializable: ^6.8.0
+  build_runner: ^2.4.13
+  retrofit_generator: ^9.1.4
+
+flutter:
+  uses-material-design: true
