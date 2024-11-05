@@ -25,6 +25,10 @@ mixin _$SettingsState {
   bool get showUnreadCountOnUpdateIcon => throw _privateConstructorUsedError;
   bool get confirmExit => throw _privateConstructorUsedError;
   String get appLanguage => throw _privateConstructorUsedError;
+  bool get darkTheme => throw _privateConstructorUsedError;
+  bool get pureBlackTheme => throw _privateConstructorUsedError;
+  String get relativeTimestamp => throw _privateConstructorUsedError;
+  String get dateFormat => throw _privateConstructorUsedError;
 
   /// Serializes this SettingsState to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -47,7 +51,11 @@ abstract class $SettingsStateCopyWith<$Res> {
       bool incognitoMode,
       bool showUnreadCountOnUpdateIcon,
       bool confirmExit,
-      String appLanguage});
+      String appLanguage,
+      bool darkTheme,
+      bool pureBlackTheme,
+      String relativeTimestamp,
+      String dateFormat});
 }
 
 /// @nodoc
@@ -70,6 +78,10 @@ class _$SettingsStateCopyWithImpl<$Res, $Val extends SettingsState>
     Object? showUnreadCountOnUpdateIcon = null,
     Object? confirmExit = null,
     Object? appLanguage = null,
+    Object? darkTheme = null,
+    Object? pureBlackTheme = null,
+    Object? relativeTimestamp = null,
+    Object? dateFormat = null,
   }) {
     return _then(_value.copyWith(
       downloadedOnly: null == downloadedOnly
@@ -92,6 +104,22 @@ class _$SettingsStateCopyWithImpl<$Res, $Val extends SettingsState>
           ? _value.appLanguage
           : appLanguage // ignore: cast_nullable_to_non_nullable
               as String,
+      darkTheme: null == darkTheme
+          ? _value.darkTheme
+          : darkTheme // ignore: cast_nullable_to_non_nullable
+              as bool,
+      pureBlackTheme: null == pureBlackTheme
+          ? _value.pureBlackTheme
+          : pureBlackTheme // ignore: cast_nullable_to_non_nullable
+              as bool,
+      relativeTimestamp: null == relativeTimestamp
+          ? _value.relativeTimestamp
+          : relativeTimestamp // ignore: cast_nullable_to_non_nullable
+              as String,
+      dateFormat: null == dateFormat
+          ? _value.dateFormat
+          : dateFormat // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
   }
 }
@@ -109,7 +137,11 @@ abstract class _$$SettingsStateImplCopyWith<$Res>
       bool incognitoMode,
       bool showUnreadCountOnUpdateIcon,
       bool confirmExit,
-      String appLanguage});
+      String appLanguage,
+      bool darkTheme,
+      bool pureBlackTheme,
+      String relativeTimestamp,
+      String dateFormat});
 }
 
 /// @nodoc
@@ -130,6 +162,10 @@ class __$$SettingsStateImplCopyWithImpl<$Res>
     Object? showUnreadCountOnUpdateIcon = null,
     Object? confirmExit = null,
     Object? appLanguage = null,
+    Object? darkTheme = null,
+    Object? pureBlackTheme = null,
+    Object? relativeTimestamp = null,
+    Object? dateFormat = null,
   }) {
     return _then(_$SettingsStateImpl(
       downloadedOnly: null == downloadedOnly
@@ -152,6 +188,22 @@ class __$$SettingsStateImplCopyWithImpl<$Res>
           ? _value.appLanguage
           : appLanguage // ignore: cast_nullable_to_non_nullable
               as String,
+      darkTheme: null == darkTheme
+          ? _value.darkTheme
+          : darkTheme // ignore: cast_nullable_to_non_nullable
+              as bool,
+      pureBlackTheme: null == pureBlackTheme
+          ? _value.pureBlackTheme
+          : pureBlackTheme // ignore: cast_nullable_to_non_nullable
+              as bool,
+      relativeTimestamp: null == relativeTimestamp
+          ? _value.relativeTimestamp
+          : relativeTimestamp // ignore: cast_nullable_to_non_nullable
+              as String,
+      dateFormat: null == dateFormat
+          ? _value.dateFormat
+          : dateFormat // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -164,7 +216,11 @@ class _$SettingsStateImpl implements _SettingsState {
       required this.incognitoMode,
       required this.showUnreadCountOnUpdateIcon,
       required this.confirmExit,
-      required this.appLanguage});
+      required this.appLanguage,
+      required this.darkTheme,
+      required this.pureBlackTheme,
+      required this.relativeTimestamp,
+      required this.dateFormat});
 
   factory _$SettingsStateImpl.fromJson(Map<String, dynamic> json) =>
       _$$SettingsStateImplFromJson(json);
@@ -179,10 +235,18 @@ class _$SettingsStateImpl implements _SettingsState {
   final bool confirmExit;
   @override
   final String appLanguage;
+  @override
+  final bool darkTheme;
+  @override
+  final bool pureBlackTheme;
+  @override
+  final String relativeTimestamp;
+  @override
+  final String dateFormat;
 
   @override
   String toString() {
-    return 'SettingsState(downloadedOnly: $downloadedOnly, incognitoMode: $incognitoMode, showUnreadCountOnUpdateIcon: $showUnreadCountOnUpdateIcon, confirmExit: $confirmExit, appLanguage: $appLanguage)';
+    return 'SettingsState(downloadedOnly: $downloadedOnly, incognitoMode: $incognitoMode, showUnreadCountOnUpdateIcon: $showUnreadCountOnUpdateIcon, confirmExit: $confirmExit, appLanguage: $appLanguage, darkTheme: $darkTheme, pureBlackTheme: $pureBlackTheme, relativeTimestamp: $relativeTimestamp, dateFormat: $dateFormat)';
   }
 
   @override
@@ -201,13 +265,30 @@ class _$SettingsStateImpl implements _SettingsState {
             (identical(other.confirmExit, confirmExit) ||
                 other.confirmExit == confirmExit) &&
             (identical(other.appLanguage, appLanguage) ||
-                other.appLanguage == appLanguage));
+                other.appLanguage == appLanguage) &&
+            (identical(other.darkTheme, darkTheme) ||
+                other.darkTheme == darkTheme) &&
+            (identical(other.pureBlackTheme, pureBlackTheme) ||
+                other.pureBlackTheme == pureBlackTheme) &&
+            (identical(other.relativeTimestamp, relativeTimestamp) ||
+                other.relativeTimestamp == relativeTimestamp) &&
+            (identical(other.dateFormat, dateFormat) ||
+                other.dateFormat == dateFormat));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, downloadedOnly, incognitoMode,
-      showUnreadCountOnUpdateIcon, confirmExit, appLanguage);
+  int get hashCode => Object.hash(
+      runtimeType,
+      downloadedOnly,
+      incognitoMode,
+      showUnreadCountOnUpdateIcon,
+      confirmExit,
+      appLanguage,
+      darkTheme,
+      pureBlackTheme,
+      relativeTimestamp,
+      dateFormat);
 
   /// Create a copy of SettingsState
   /// with the given fields replaced by the non-null parameter values.
@@ -231,7 +312,11 @@ abstract class _SettingsState implements SettingsState {
       required final bool incognitoMode,
       required final bool showUnreadCountOnUpdateIcon,
       required final bool confirmExit,
-      required final String appLanguage}) = _$SettingsStateImpl;
+      required final String appLanguage,
+      required final bool darkTheme,
+      required final bool pureBlackTheme,
+      required final String relativeTimestamp,
+      required final String dateFormat}) = _$SettingsStateImpl;
 
   factory _SettingsState.fromJson(Map<String, dynamic> json) =
       _$SettingsStateImpl.fromJson;
@@ -246,6 +331,14 @@ abstract class _SettingsState implements SettingsState {
   bool get confirmExit;
   @override
   String get appLanguage;
+  @override
+  bool get darkTheme;
+  @override
+  bool get pureBlackTheme;
+  @override
+  String get relativeTimestamp;
+  @override
+  String get dateFormat;
 
   /// Create a copy of SettingsState
   /// with the given fields replaced by the non-null parameter values.

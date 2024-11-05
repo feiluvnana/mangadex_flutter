@@ -12,12 +12,18 @@ class SettingsState with _$SettingsState {
       required bool incognitoMode,
       required bool showUnreadCountOnUpdateIcon,
       required bool confirmExit,
-      required String appLanguage}) = _SettingsState;
+      required String appLanguage,
+      required bool darkTheme,
+      required bool pureBlackTheme,
+      required String relativeTimestamp,
+      required String dateFormat}) = _SettingsState;
 
-  factory SettingsState.fromJson(Map<String, dynamic> json) => _$SettingsStateFromJson(json);
+  factory SettingsState.fromJson(Map<String, dynamic> json) =>
+      _$SettingsStateFromJson(json);
 }
 
-final settingsProvider = NotifierProvider<SettingsNotifier, SettingsState>(SettingsNotifier.new);
+final settingsProvider =
+    NotifierProvider<SettingsNotifier, SettingsState>(SettingsNotifier.new);
 
 class SettingsNotifier extends Notifier<SettingsState> {
   @override
@@ -27,7 +33,11 @@ class SettingsNotifier extends Notifier<SettingsState> {
         incognitoMode: SPService.getIncognitoMode(),
         showUnreadCountOnUpdateIcon: SPService.getShowUnreadCountOnUpdateIcon(),
         confirmExit: SPService.getConfirmExit(),
-        appLanguage: SPService.getAppLanguage());
+        appLanguage: SPService.getAppLanguage(),
+        darkTheme: SPService.getDarkTheme(),
+        pureBlackTheme: SPService.getPureBlackTheme(),
+        relativeTimestamp: SPService.getRelativeTimestamp(),
+        dateFormat: SPService.getDateFormat());
   }
 
   Future<void> setDownloadedOnly(bool value) async {
@@ -53,5 +63,25 @@ class SettingsNotifier extends Notifier<SettingsState> {
   Future<void> setAppLanguage(String value) async {
     await SPService.setAppLanguage(value);
     state = state.copyWith(appLanguage: value);
+  }
+
+  Future<void> setDarkTheme(bool value) async {
+    await SPService.setDarkTheme(value);
+    state = state.copyWith(darkTheme: value);
+  }
+
+  Future<void> setPureBlackTheme(bool value) async {
+    await SPService.setPureBlackTheme(value);
+    state = state.copyWith(pureBlackTheme: value);
+  }
+
+  Future<void> setRelativeTimestamp(String value) async {
+    await SPService.setRelativeTimestamp(value);
+    state = state.copyWith(relativeTimestamp: value);
+  }
+
+  Future<void> setDateFormat(String value) async {
+    await SPService.setDateFormat(value);
+    state = state.copyWith(dateFormat: value);
   }
 }

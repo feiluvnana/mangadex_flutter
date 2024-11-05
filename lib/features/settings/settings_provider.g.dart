@@ -13,6 +13,10 @@ _$SettingsStateImpl _$$SettingsStateImplFromJson(Map<String, dynamic> json) =>
       showUnreadCountOnUpdateIcon: json['showUnreadCountOnUpdateIcon'] as bool,
       confirmExit: json['confirmExit'] as bool,
       appLanguage: json['appLanguage'] as String,
+      darkTheme: json['darkTheme'] as bool,
+      pureBlackTheme: json['pureBlackTheme'] as bool,
+      relativeTimestamp: json['relativeTimestamp'] as String,
+      dateFormat: json['dateFormat'] as String,
     );
 
 Map<String, dynamic> _$$SettingsStateImplToJson(_$SettingsStateImpl instance) =>
@@ -22,4 +26,8 @@ Map<String, dynamic> _$$SettingsStateImplToJson(_$SettingsStateImpl instance) =>
       'showUnreadCountOnUpdateIcon': instance.showUnreadCountOnUpdateIcon,
       'confirmExit': instance.confirmExit,
       'appLanguage': instance.appLanguage,
+      'darkTheme': instance.darkTheme,
+      'pureBlackTheme': instance.pureBlackTheme,
+      'relativeTimestamp': instance.relativeTimestamp,
+      'dateFormat': instance.dateFormat,
     };

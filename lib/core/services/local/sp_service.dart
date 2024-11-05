@@ -14,6 +14,10 @@ class SPService {
   static const SHOW_UNREAD_COUNT_ON_UPDATE_ICON = "show_unread_count_on_update_icon";
   static const CONFIRM_EXIT = "confirm_exit";
   static const APP_LANGUAGE = "app_language";
+  static const DARK_THEME = "dark_theme";
+  static const PURE_BLACK_THEME = "pure_black_theme";
+  static const RELATIVE_TIMESTAMP = "relative_timestamp";
+  static const DATE_FORMAT = "date_format";
 
   static Future<void> setDownloadedOnly(bool value) async {
     await _prefs.setBool(DOWNLOADED_ONLY, value);
@@ -53,5 +57,37 @@ class SPService {
 
   static String getAppLanguage() {
     return _prefs.getString(APP_LANGUAGE) ?? "en";
+  }
+
+  static Future<void> setDarkTheme(bool value) async {
+    await _prefs.setBool(DARK_THEME, value);
+  }
+
+  static bool getDarkTheme() {
+    return _prefs.getBool(DARK_THEME) ?? true;
+  }
+
+  static Future<void> setPureBlackTheme(bool value) async {
+    await _prefs.setBool(PURE_BLACK_THEME, value);
+  }
+
+  static bool getPureBlackTheme() {
+    return _prefs.getBool(PURE_BLACK_THEME) ?? false;
+  }
+
+  static Future<void> setRelativeTimestamp(String value) async {
+    await _prefs.setString(RELATIVE_TIMESTAMP, value);
+  }
+
+  static String getRelativeTimestamp() {
+    return _prefs.getString(RELATIVE_TIMESTAMP) ?? "long";
+  }
+
+  static Future<void> setDateFormat(String value) async {
+    await _prefs.setString(DATE_FORMAT, value);
+  }
+
+  static String getDateFormat() {
+    return _prefs.getString(DATE_FORMAT) ?? "dd/MM/yyyy";
   }
 }
