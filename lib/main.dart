@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mangadex_flutter/core/services/local/cache_service.dart';
 import 'package:mangadex_flutter/core/services/local/sp_service.dart';
 import 'package:mangadex_flutter/features/home/home_page.dart';
 import 'package:mangadex_flutter/features/settings/appearance_page.dart';
@@ -12,7 +12,8 @@ import 'package:mangadex_flutter/features/settings/settings_page.dart';
 import 'package:mangadex_flutter/features/settings/settings_provider.dart';
 
 void main() async {
-  usePathUrlStrategy();
+  WidgetsFlutterBinding.ensureInitialized();
+  await CacheService.initialize();
   await SPService.initialize();
   runApp(const ProviderScope(child: Mangadex()));
 }
@@ -38,12 +39,14 @@ class _MangadexState extends ConsumerState<Mangadex> {
               builder: (context, state) => const SettingsPage(),
               routes: [
                 GoRoute(
-                    path: "/general", builder: (context, state) => const GeneralPage()),
+                    path: "/general",
+                    builder: (context, state) => const GeneralSettingsPage()),
                 GoRoute(
                     path: "/appearance",
-                    builder: (context, state) => const AppearancePage()),
+                    builder: (context, state) => const AppearanceSettingsPage()),
                 GoRoute(
-                    path: "/library", builder: (context, state) => const LibraryPage())
+                    path: "/library",
+                    builder: (context, state) => const LibrarySettingsPage())
               ])
         ])
   ]);

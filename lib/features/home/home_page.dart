@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mangadex_flutter/common/helpers.dart';
+import 'package:mangadex_flutter/features/home/library_page.dart';
 import 'package:mangadex_flutter/features/home/more_page.dart';
 
 class HomePage extends ConsumerStatefulWidget {
@@ -45,7 +46,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     return Scaffold(
         body: PageView(
             controller: _pageController,
-            children: const [Text("1"), Text("2"), Text("3"), MorePage()]),
+            children: const [LibraryPage(), Text("2"), Text("3"), MorePage()]),
         bottomNavigationBar: BottomNavigationBar(
             currentIndex: currentIndex,
             onTap: (value) {

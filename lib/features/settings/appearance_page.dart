@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mangadex_flutter/features/settings/settings_provider.dart';
 
-class AppearancePage extends ConsumerWidget {
-  const AppearancePage({super.key});
+class AppearanceSettingsPage extends ConsumerWidget {
+  const AppearanceSettingsPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

@@ -4,8 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mangadex_flutter/features/settings/settings_provider.dart';
 
-class GeneralPage extends ConsumerWidget {
-  const GeneralPage({super.key});
+class GeneralSettingsPage extends ConsumerWidget {
+  const GeneralSettingsPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

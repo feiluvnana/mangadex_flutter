@@ -9,15 +9,15 @@ class SPService {
     _prefs = await SharedPreferences.getInstance();
   }
 
-  static const DOWNLOADED_ONLY = "downloaded_only";
-  static const INCOGNITO_MODE = "incognito_mode";
-  static const SHOW_UNREAD_COUNT_ON_UPDATE_ICON = "show_unread_count_on_update_icon";
-  static const CONFIRM_EXIT = "confirm_exit";
-  static const APP_LANGUAGE = "app_language";
-  static const DARK_THEME = "dark_theme";
-  static const PURE_BLACK_THEME = "pure_black_theme";
-  static const RELATIVE_TIMESTAMP = "relative_timestamp";
-  static const DATE_FORMAT = "date_format";
+  static const DOWNLOADED_ONLY = "sp.downloaded_only";
+  static const INCOGNITO_MODE = "sp.incognito_mode";
+  static const SHOW_UNREAD_COUNT_ON_UPDATE_ICON = "sp.show_unread_count_on_update_icon";
+  static const CONFIRM_EXIT = "sp.confirm_exit";
+  static const APP_LANGUAGE = "sp.app_language";
+  static const DARK_THEME = "sp.dark_theme";
+  static const PURE_BLACK_THEME = "sp.pure_black_theme";
+  static const RELATIVE_TIMESTAMP = "sp.relative_timestamp";
+  static const DATE_FORMAT = "sp.date_format";
 
   static Future<void> setDownloadedOnly(bool value) async {
     await _prefs.setBool(DOWNLOADED_ONLY, value);
