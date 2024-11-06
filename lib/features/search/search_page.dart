@@ -99,90 +99,173 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                   const SizedBox(height: 16),
                   Expanded(
                       child: switch (currentTab) {
-                    0 => RefreshIndicator(
-                        onRefresh: () async {
-                          ref.invalidate(popularMangaProvider);
-                          popularPagingController.refresh();
-                        },
-                        child: PagedGridView<int, mgd.Manga>(
-                            key: const PageStorageKey("popular"),
-                            scrollController: popularScrollController,
-                            pagingController: popularPagingController,
-                            showNewPageErrorIndicatorAsGridChild: false,
-                            showNewPageProgressIndicatorAsGridChild: false,
-                            showNoMoreItemsIndicatorAsGridChild: false,
-                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 3,
-                                childAspectRatio: 2 / (sqrt(5) + 1),
-                                crossAxisSpacing: 12,
-                                mainAxisSpacing: 12),
-                            builderDelegate: PagedChildBuilderDelegate<mgd.Manga>(
-                                itemBuilder: (context, manga, index) =>
-                                    _MangaCard(manga)))),
-                    1 => RefreshIndicator(
-                        onRefresh: () async {
-                          ref.invalidate(latestMangaProvider);
-                          latestPagingController.refresh();
-                        },
-                        child: PagedGridView<int, mgd.Manga>(
-                            key: const PageStorageKey("latest"),
-                            scrollController: latestScrollController,
-                            pagingController: latestPagingController,
-                            showNewPageErrorIndicatorAsGridChild: false,
-                            showNewPageProgressIndicatorAsGridChild: false,
-                            showNoMoreItemsIndicatorAsGridChild: false,
-                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 3,
-                                childAspectRatio: 2 / (sqrt(5) + 1),
-                                crossAxisSpacing: 12,
-                                mainAxisSpacing: 12),
-                            builderDelegate: PagedChildBuilderDelegate<mgd.Manga>(
-                                itemBuilder: (context, manga, index) =>
-                                    _MangaCard(manga)))),
-                    2 => ListView(children: [
-                        ExpansionTile(
-                            shape: const RoundedRectangleBorder(),
-                            title: const Text("Content rating"),
-                            children: [
-                              Row(children: [
-                                Checkbox(
-                                    value: mangaFilterParams.contentRating
-                                        .contains(mgd.ContentRating.safe),
-                                    onChanged: (value) {}),
-                                const Text("Safe")
-                              ]),
-                              Row(children: [
-                                Checkbox(
-                                    value: mangaFilterParams.contentRating
-                                        .contains(mgd.ContentRating.suggestive),
-                                    onChanged: (value) {}),
-                                const Text("Suggestive")
-                              ]),
-                              Row(children: [
-                                Checkbox(
-                                    value: mangaFilterParams.contentRating
-                                        .contains(mgd.ContentRating.erotica),
-                                    onChanged: (value) {}),
-                                const Text("Erotica")
-                              ]),
-                              Row(children: [
-                                Checkbox(
-                                    value: mangaFilterParams.contentRating
-                                        .contains(mgd.ContentRating.pornographic),
-                                    onChanged: (value) {}),
-                                const Text("Pornographic")
-                              ])
-                            ])
-                      ]),
+                    0 => _popularTab(),
+                    1 => _latestTab(),
+                    2 => _filterTab(),
                     _ => const SizedBox.shrink()
                   })
                 ])),
-            floatingActionButton: currentTab == 0
-                ? null
-                : FloatingActionButton(
+            floatingActionButton: currentTab == 2
+                ? FloatingActionButton(
                     shape: const CircleBorder(),
-                    onPressed: () {},
-                    child: const Icon(Icons.arrow_upward))));
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => _FilterResultPage(mangaFilterParams)));
+                    },
+                    child: const Icon(Icons.search))
+                : null));
+  }
+
+  void _updateContentRating(mgd.ContentRating contentRating, bool? value) {
+    final newContentRating = value == false
+        ? mangaFilterParams.contentRating.where((e) => e != contentRating).toSet()
+        : (mangaFilterParams.contentRating.toSet()..add(contentRating));
+    mangaFilterParams = mangaFilterParams.copyWith(contentRating: newContentRating);
+    setState(() {});
+  }
+
+  Widget _popularTab() {
+    return RefreshIndicator(
+        onRefresh: () async {
+          ref.invalidate(popularMangaProvider);
+          popularPagingController.refresh();
+        },
+        child: PagedGridView<int, mgd.Manga>(
+            key: const PageStorageKey("popular"),
+            scrollController: popularScrollController,
+            pagingController: popularPagingController,
+            showNewPageErrorIndicatorAsGridChild: false,
+            showNewPageProgressIndicatorAsGridChild: false,
+            showNoMoreItemsIndicatorAsGridChild: false,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                childAspectRatio: 2 / (sqrt(5) + 1),
+                crossAxisSpacing: 12,
+                mainAxisSpacing: 12),
+            builderDelegate: PagedChildBuilderDelegate<mgd.Manga>(
+                itemBuilder: (context, manga, index) => _MangaCard(manga))));
+  }
+
+  Widget _latestTab() {
+    return RefreshIndicator(
+        onRefresh: () async {
+          ref.invalidate(latestMangaProvider);
+          latestPagingController.refresh();
+        },
+        child: PagedGridView<int, mgd.Manga>(
+            key: const PageStorageKey("latest"),
+            scrollController: latestScrollController,
+            pagingController: latestPagingController,
+            showNewPageErrorIndicatorAsGridChild: false,
+            showNewPageProgressIndicatorAsGridChild: false,
+            showNoMoreItemsIndicatorAsGridChild: false,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                childAspectRatio: 2 / (sqrt(5) + 1),
+                crossAxisSpacing: 12,
+                mainAxisSpacing: 12),
+            builderDelegate: PagedChildBuilderDelegate<mgd.Manga>(
+                itemBuilder: (context, manga, index) => _MangaCard(manga))));
+  }
+
+  Widget _filterTab() {
+    return Theme(
+        data: Theme.of(context).copyWith(
+            listTileTheme: ListTileThemeData(
+                minTileHeight: 36,
+                titleTextStyle: Theme.of(context).textTheme.bodyMedium,
+                contentPadding: const EdgeInsets.symmetric(horizontal: 12))),
+        child: ListView(children: [
+          ExpansionTile(
+              shape: const RoundedRectangleBorder(),
+              title: const Text("Content rating",
+                  style: TextStyle(fontWeight: FontWeight.bold)),
+              children: [
+                ListTile(
+                    leading: Checkbox(
+                        value: mangaFilterParams.contentRating
+                            .contains(mgd.ContentRating.safe),
+                        onChanged: (value) {
+                          _updateContentRating(mgd.ContentRating.safe, value);
+                        }),
+                    title: const Text("Safe")),
+                ListTile(
+                    leading: Checkbox(
+                        value: mangaFilterParams.contentRating
+                            .contains(mgd.ContentRating.suggestive),
+                        onChanged: (value) {
+                          _updateContentRating(mgd.ContentRating.suggestive, value);
+                        }),
+                    title: const Text("Suggestive")),
+                ListTile(
+                    leading: Checkbox(
+                        value: mangaFilterParams.contentRating
+                            .contains(mgd.ContentRating.erotica),
+                        onChanged: (value) {
+                          _updateContentRating(mgd.ContentRating.erotica, value);
+                        }),
+                    title: const Text("Erotica")),
+                ListTile(
+                    leading: Checkbox(
+                        value: mangaFilterParams.contentRating
+                            .contains(mgd.ContentRating.pornographic),
+                        onChanged: (value) {
+                          _updateContentRating(mgd.ContentRating.pornographic, value);
+                        }),
+                    title: const Text("Pornographic"))
+              ])
+        ]));
+  }
+}
+
+class _FilterResultPage extends ConsumerStatefulWidget {
+  final MangaFilterParams mangaFilterParams;
+  const _FilterResultPage(this.mangaFilterParams);
+
+  @override
+  ConsumerState<_FilterResultPage> createState() => _FilterResultPageState();
+}
+
+class _FilterResultPageState extends ConsumerState<_FilterResultPage> {
+  final pagingController =
+      PagingController<int, mgd.Manga>(firstPageKey: 0, invisibleItemsThreshold: 20);
+  final scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    pagingController.addPageRequestListener((pageKey) async {
+      final mangas =
+          await ref.read(filterMangaProvider((pageKey, widget.mangaFilterParams)).future);
+      if (mangas.length < 20) {
+        pagingController.appendLastPage(mangas);
+      } else {
+        pagingController.appendPage(mangas, pageKey + 20);
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+            leading: IconButton(
+                onPressed: Navigator.of(context).pop, icon: const Icon(Icons.arrow_back)),
+            forceMaterialTransparency: true,
+            centerTitle: false,
+            title: const Text("Filter results")),
+        body: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: PagedGridView<int, mgd.Manga>(
+                pagingController: pagingController,
+                scrollController: scrollController,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    childAspectRatio: 2 / (sqrt(5) + 1),
+                    crossAxisSpacing: 12,
+                    mainAxisSpacing: 12),
+                builderDelegate: PagedChildBuilderDelegate<mgd.Manga>(
+                    itemBuilder: (context, manga, index) => _MangaCard(manga)))));
   }
 }
 

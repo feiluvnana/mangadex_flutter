@@ -27,29 +27,23 @@ class Mangadex extends ConsumerStatefulWidget {
 
 class _MangadexState extends ConsumerState<Mangadex> {
   final router = GoRouter(initialLocation: "/home", routes: [
-    GoRoute(
-        path: "/home",
-        builder: (context, state) {
-          final initialTab = int.tryParse(state.uri.queryParameters["t"] ?? "0") ?? 0;
-          return HomePage(initialTab: initialTab);
-        },
-        routes: [
-          GoRoute(
-              path: "/settings",
-              builder: (context, state) => const SettingsPage(),
-              routes: [
-                GoRoute(
-                    path: "/general",
-                    builder: (context, state) => const GeneralSettingsPage()),
-                GoRoute(
-                    path: "/appearance",
-                    builder: (context, state) => const AppearanceSettingsPage()),
-                GoRoute(
-                    path: "/library",
-                    builder: (context, state) => const LibrarySettingsPage())
-              ]),
-          GoRoute(path: "/search", builder: (context, state) => const SearchPage())
-        ])
+    GoRoute(path: "/home", builder: (context, state) => const HomePage(), routes: [
+      GoRoute(
+          path: "/settings",
+          builder: (context, state) => const SettingsPage(),
+          routes: [
+            GoRoute(
+                path: "/general",
+                builder: (context, state) => const GeneralSettingsPage()),
+            GoRoute(
+                path: "/appearance",
+                builder: (context, state) => const AppearanceSettingsPage()),
+            GoRoute(
+                path: "/library",
+                builder: (context, state) => const LibrarySettingsPage())
+          ]),
+      GoRoute(path: "/search", builder: (context, state) => const SearchPage())
+    ])
   ]);
 
   @override

@@ -5,9 +5,7 @@ import 'package:mangadex_flutter/features/home/library_page.dart';
 import 'package:mangadex_flutter/features/home/more_page.dart';
 
 class HomePage extends ConsumerStatefulWidget {
-  final int? initialTab;
-
-  const HomePage({super.key, this.initialTab});
+  const HomePage({super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _HomePageState();
@@ -34,11 +32,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   @override
   void initState() {
     super.initState();
-    int appliedInitialTab = widget.initialTab ?? 0;
-    if (appliedInitialTab > 3) appliedInitialTab = 3;
-    if (appliedInitialTab < 0) appliedInitialTab = 0;
-    _pageController = PageController(initialPage: appliedInitialTab);
-    currentIndex = appliedInitialTab;
+    _pageController = PageController(initialPage: 0);
   }
 
   @override

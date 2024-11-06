@@ -26,7 +26,7 @@ class MangaFilterParams with _$MangaFilterParams {
       Set<ContentRating> contentRating}) = _MangaFilterParams;
 }
 
-final mangaFilterProvider = FutureProvider.autoDispose
+final filterMangaProvider = FutureProvider.autoDispose
     .family<List<Manga>, (int, MangaFilterParams)>((ref, params) async {
   final result = await MangadexApi.instance.mangas(
       limit: 20,
