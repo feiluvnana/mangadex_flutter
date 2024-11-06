@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mangadex_flutter/core/services/local/cache_service.dart';
 import 'package:mangadex_flutter/core/services/local/sp_service.dart';
 import 'package:mangadex_flutter/features/home/home_page.dart';
+import 'package:mangadex_flutter/features/search/search_page.dart';
 import 'package:mangadex_flutter/features/settings/appearance_page.dart';
 import 'package:mangadex_flutter/features/settings/general_page.dart';
 import 'package:mangadex_flutter/features/settings/library_page.dart';
@@ -13,7 +13,7 @@ import 'package:mangadex_flutter/features/settings/settings_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await CacheService.initialize();
+
   await SPService.initialize();
   runApp(const ProviderScope(child: Mangadex()));
 }
@@ -47,7 +47,8 @@ class _MangadexState extends ConsumerState<Mangadex> {
                 GoRoute(
                     path: "/library",
                     builder: (context, state) => const LibrarySettingsPage())
-              ])
+              ]),
+          GoRoute(path: "/search", builder: (context, state) => const SearchPage())
         ])
   ]);
 
@@ -71,8 +72,9 @@ class _MangadexState extends ConsumerState<Mangadex> {
         bodySmall: TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.lerp(FontWeight.w300, FontWeight.normal, 0.5)!),
-        titleMedium: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-        titleLarge: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600)));
+        titleSmall: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+        titleMedium: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+        titleLarge: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700)));
     final lightTextTheme = textTheme.apply(
         bodyColor: lightColorScheme.onSurface, displayColor: lightColorScheme.onSurface);
     final darkTextTheme = textTheme.apply(

@@ -13,5 +13,6 @@
     },
     "fonted.font": "Inter",
     "dart.lineLength": 90,
-    "dart.previewFlutterUiGuides": true
+    "dart.previewFlutterUiGuides": true,
+    "workbench.colorTheme": "Default Dark Modern",
 }

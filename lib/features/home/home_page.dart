@@ -1,6 +1,6 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mangadex_flutter/common/helpers.dart';
 import 'package:mangadex_flutter/features/home/library_page.dart';
 import 'package:mangadex_flutter/features/home/more_page.dart';
 
@@ -55,7 +55,7 @@ class _HomePageState extends ConsumerState<HomePage> {
               setState(() {});
             },
             items: _bottomIcons
-                .mapIndexed((icon, index) => BottomNavigationBarItem(
+                .mapIndexed((index, icon) => BottomNavigationBarItem(
                     icon: Icon(icon),
                     activeIcon: Icon(_bottomActiveIcons[index]),
                     label: _bottomLabels[index]))

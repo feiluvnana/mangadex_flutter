@@ -1,0 +1,11 @@
+targets:
+  $default:
+    builders:
+      drift_dev:
+        generate_for:
+          include:
+            - lib/core/services/local/
+      freezed:
+        generate_for:
+          exclude:
+            - lib/core/services/local/

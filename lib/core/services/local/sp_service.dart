@@ -9,15 +9,17 @@ class SPService {
     _prefs = await SharedPreferences.getInstance();
   }
 
-  static const DOWNLOADED_ONLY = "sp.downloaded_only";
-  static const INCOGNITO_MODE = "sp.incognito_mode";
-  static const SHOW_UNREAD_COUNT_ON_UPDATE_ICON = "sp.show_unread_count_on_update_icon";
-  static const CONFIRM_EXIT = "sp.confirm_exit";
-  static const APP_LANGUAGE = "sp.app_language";
-  static const DARK_THEME = "sp.dark_theme";
-  static const PURE_BLACK_THEME = "sp.pure_black_theme";
-  static const RELATIVE_TIMESTAMP = "sp.relative_timestamp";
-  static const DATE_FORMAT = "sp.date_format";
+  static const _spPrefix = "sp.";
+  static const DOWNLOADED_ONLY = "$_spPrefix.downloaded_only";
+  static const INCOGNITO_MODE = "$_spPrefix.incognito_mode";
+  static const SHOW_UNREAD_COUNT_ON_UPDATE_ICON =
+      "$_spPrefix.show_unread_count_on_update_icon";
+  static const CONFIRM_EXIT = "$_spPrefix.confirm_exit";
+  static const APP_LANGUAGE = "$_spPrefix.app_language";
+  static const DARK_THEME = "$_spPrefix.dark_theme";
+  static const PURE_BLACK_THEME = "$_spPrefix.pure_black_theme";
+  static const RELATIVE_TIMESTAMP = "$_spPrefix.relative_timestamp";
+  static const DATE_FORMAT = "$_spPrefix.date_format";
 
   static Future<void> setDownloadedOnly(bool value) async {
     await _prefs.setBool(DOWNLOADED_ONLY, value);
