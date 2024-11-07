@@ -1,9 +1,11 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mangadex_flutter/core/services/local/sp_service.dart';
 import 'package:mangadex_flutter/features/home/home_page.dart';
+import 'package:mangadex_flutter/features/search/filter_result_manga_page.dart';
 import 'package:mangadex_flutter/features/search/search_page.dart';
 import 'package:mangadex_flutter/features/settings/appearance_page.dart';
 import 'package:mangadex_flutter/features/settings/general_page.dart';
@@ -33,16 +35,20 @@ class _MangadexState extends ConsumerState<Mangadex> {
           builder: (context, state) => const SettingsPage(),
           routes: [
             GoRoute(
-                path: "/general",
+                path: "general",
                 builder: (context, state) => const GeneralSettingsPage()),
             GoRoute(
-                path: "/appearance",
+                path: "appearance",
                 builder: (context, state) => const AppearanceSettingsPage()),
             GoRoute(
-                path: "/library",
-                builder: (context, state) => const LibrarySettingsPage())
+                path: "library", builder: (context, state) => const LibrarySettingsPage())
           ]),
-      GoRoute(path: "/search", builder: (context, state) => const SearchPage())
+      GoRoute(path: "/search", builder: (context, state) => const SearchPage(), routes: [
+        GoRoute(
+            path: "manga/:mangaId",
+            builder: (context, state) =>
+                FilterResultMangaPage(mangaId: state.pathParameters["mangaId"]!))
+      ])
     ])
   ]);
 
@@ -62,10 +68,15 @@ class _MangadexState extends ConsumerState<Mangadex> {
         seedColor: Colors.lightBlueAccent,
         brightness: Brightness.dark,
         surface: pureBlackTheme ? Colors.black : null);
-    final textTheme = GoogleFonts.poppinsTextTheme(TextTheme(
+    final textTheme = GoogleFonts.interTextTheme(TextTheme(
+        labelSmall: const TextStyle(fontSize: 8, fontWeight: FontWeight.w500),
+        labelMedium: const TextStyle(fontSize: 10, fontWeight: FontWeight.w500),
+        labelLarge: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
         bodySmall: TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.lerp(FontWeight.w300, FontWeight.normal, 0.5)!),
+        bodyMedium: const TextStyle(fontSize: 14),
+        bodyLarge: const TextStyle(fontSize: 16),
         titleSmall: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
         titleMedium: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
         titleLarge: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700)));
@@ -77,9 +88,20 @@ class _MangadexState extends ConsumerState<Mangadex> {
     return MaterialApp.router(
         debugShowCheckedModeBanner: false,
         themeMode: darkTheme ? ThemeMode.dark : ThemeMode.light,
+        scrollBehavior: ScrollConfiguration.of(context)
+            .copyWith(dragDevices: {PointerDeviceKind.touch, PointerDeviceKind.mouse}),
         theme: ThemeData(
             textTheme: lightTextTheme,
             appBarTheme: AppBarTheme(titleTextStyle: lightTextTheme.titleLarge),
+            expansionTileTheme:
+                const ExpansionTileThemeData(shape: RoundedRectangleBorder()),
+            segmentedButtonTheme: SegmentedButtonThemeData(
+                selectedIcon: Icon(Icons.check,
+                    size: 16, color: lightColorScheme.onPrimaryContainer),
+                style: SegmentedButton.styleFrom(
+                    textStyle: lightTextTheme.titleSmall,
+                    selectedBackgroundColor: lightColorScheme.primaryContainer,
+                    selectedForegroundColor: lightColorScheme.onPrimaryContainer)),
             listTileTheme: ListTileThemeData(
                 iconColor: lightColorScheme.primary,
                 titleTextStyle: lightTextTheme.titleMedium,
@@ -94,6 +116,15 @@ class _MangadexState extends ConsumerState<Mangadex> {
         darkTheme: ThemeData(
             textTheme: darkTextTheme,
             appBarTheme: AppBarTheme(titleTextStyle: darkTextTheme.titleLarge),
+            expansionTileTheme:
+                const ExpansionTileThemeData(shape: RoundedRectangleBorder()),
+            segmentedButtonTheme: SegmentedButtonThemeData(
+                selectedIcon: Icon(Icons.check,
+                    size: 16, color: darkColorScheme.onPrimaryContainer),
+                style: SegmentedButton.styleFrom(
+                    textStyle: darkTextTheme.titleSmall,
+                    selectedBackgroundColor: darkColorScheme.primaryContainer,
+                    selectedForegroundColor: darkColorScheme.onPrimaryContainer)),
             listTileTheme: ListTileThemeData(
                 iconColor: darkColorScheme.primary,
                 titleTextStyle: darkTextTheme.titleMedium,

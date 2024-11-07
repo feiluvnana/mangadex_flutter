@@ -4,8 +4,13 @@ targets:
       drift_dev:
         generate_for:
           include:
-            - lib/core/services/local/
+            - lib/core/services/local/drift/*.dart
+            - lib/core/services/local/drift/tables/*.dart
       freezed:
         generate_for:
           exclude:
-            - lib/core/services/local/
+            - lib/core/services/local/drift/
+      json_serializable:
+        generate_for:
+          exclude:
+            - lib/core/services/local/drift/
