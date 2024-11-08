@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mangadex_flutter/common/widgets/tab_chip.dart';
+import 'package:mangadex_flutter/common/widgets/tab_chip_skeleton.dart';
 import 'package:mangadex_flutter/features/search/search_provider.dart';
 import 'package:mangadex_flutter/features/search/tabs/filter_result_tab.dart';
 import 'package:mangadex_flutter/features/search/tabs/latest_tab.dart';
@@ -31,19 +31,19 @@ class _SearchPageState extends ConsumerState<SearchPage> {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Column(children: [
               Row(children: [
-                TabChip(
+                TabChipSkeleton(
                     icon: Icons.favorite,
                     label: "Popular",
                     selected: currentTab == 0,
                     onSelected: (value) => setState(() => currentTab = 0)),
                 const SizedBox(width: 8),
-                TabChip(
+                TabChipSkeleton(
                     icon: Icons.new_releases,
                     label: "Latest",
                     selected: currentTab == 1,
                     onSelected: (value) => setState(() => currentTab = 1)),
                 const SizedBox(width: 8),
-                TabChip(
+                TabChipSkeleton(
                     icon: Icons.filter_alt,
                     label: "Filter",
                     selected: currentTab == 2,

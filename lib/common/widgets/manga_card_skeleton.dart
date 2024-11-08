@@ -2,13 +2,20 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cached_network_image_platform_interface/cached_network_image_platform_interface.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:mangadex_flutter/main_provider.dart';
 import 'package:mangadexapi_flutter/mangadexapi_flutter.dart' as mgd;
 
-class SearchResultMangaCard extends ConsumerWidget {
+enum MangaCardSkeletonThumbnailSize { original, x256, x512 }
+
+class MangaCardSkeleton extends ConsumerWidget {
   final mgd.Manga manga;
-  const SearchResultMangaCard({required this.manga, super.key});
+  final void Function() onTap;
+  final MangaCardSkeletonThumbnailSize thumbnailSize;
+  const MangaCardSkeleton(
+      {required this.manga,
+      required this.onTap,
+      this.thumbnailSize = MangaCardSkeletonThumbnailSize.x256,
+      super.key});
 
   Future<mgd.Cover?> _getCover(WidgetRef ref) async {
     if (manga.coverArt == null) return null;
@@ -22,15 +29,23 @@ class SearchResultMangaCard extends ConsumerWidget {
     return FutureBuilder<mgd.Cover?>(
         future: _getCover(ref),
         builder: (context, snapshot) {
-          return GestureDetector(
-              onTap: () => context.go("/home/search/manga/${manga.id}"),
+          return InkWell(
+              onTap: onTap,
               child: Container(
                   clipBehavior: Clip.antiAlias,
                   decoration: BoxDecoration(borderRadius: BorderRadius.circular(12)),
                   child: Stack(children: [
                     Positioned.fill(
                         child: CachedNetworkImage(
-                            imageUrl: snapshot.data?.url256 ?? "",
+                            imageUrl: switch (thumbnailSize) {
+                                  MangaCardSkeletonThumbnailSize.original =>
+                                    snapshot.data?.url,
+                                  MangaCardSkeletonThumbnailSize.x256 =>
+                                    snapshot.data?.url256,
+                                  MangaCardSkeletonThumbnailSize.x512 =>
+                                    snapshot.data?.url512,
+                                } ??
+                                "",
                             errorWidget: (context, url, error) => const Placeholder(),
                             fit: BoxFit.cover,
                             imageRenderMethodForWeb: ImageRenderMethodForWeb.HttpGet)),

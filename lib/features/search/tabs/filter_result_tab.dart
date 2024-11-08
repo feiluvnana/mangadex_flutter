@@ -2,9 +2,10 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:mangadex_flutter/common/widgets/manga_card_skeleton.dart';
 import 'package:mangadex_flutter/features/search/search_provider.dart';
-import 'package:mangadex_flutter/features/search/widgets/search_result_manga_card.dart';
 import 'package:mangadexapi_flutter/mangadexapi_flutter.dart' as mgd;
 
 class FilterResultTab extends ConsumerStatefulWidget {
@@ -53,7 +54,8 @@ class _FilterResultPageState extends ConsumerState<FilterResultTab> {
                     crossAxisSpacing: 12,
                     mainAxisSpacing: 12),
                 builderDelegate: PagedChildBuilderDelegate<mgd.Manga>(
-                    itemBuilder: (context, manga, index) =>
-                        SearchResultMangaCard(manga: manga)))));
+                    itemBuilder: (context, manga, index) => MangaCardSkeleton(
+                        manga: manga,
+                        onTap: () => context.go("/home/search/manga/${manga.id}"))))));
   }
 }

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class TabChip extends StatelessWidget {
+class TabChipSkeleton extends StatelessWidget {
   final String label;
   final IconData icon;
   final bool selected;
   final void Function(bool) onSelected;
-  const TabChip(
+  const TabChipSkeleton(
       {super.key,
       required this.selected,
       required this.onSelected,
