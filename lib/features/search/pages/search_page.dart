@@ -1,12 +1,10 @@
-import 'dart:math';
-
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cached_network_image_platform_interface/cached_network_image_platform_interface.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:mangadex_flutter/common/widgets/tab_chip.dart';
 import 'package:mangadex_flutter/features/search/search_provider.dart';
+import 'package:mangadex_flutter/features/search/tabs/filter_result_tab.dart';
+import 'package:mangadex_flutter/features/search/tabs/latest_tab.dart';
+import 'package:mangadex_flutter/features/search/tabs/popular_tab.dart';
 import 'package:mangadex_flutter/main_provider.dart';
 import 'package:mangadexapi_flutter/mangadexapi_flutter.dart' as mgd;
 
@@ -33,19 +31,19 @@ class _SearchPageState extends ConsumerState<SearchPage> {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Column(children: [
               Row(children: [
-                _ExpandableChip(
+                TabChip(
                     icon: Icons.favorite,
                     label: "Popular",
                     selected: currentTab == 0,
                     onSelected: (value) => setState(() => currentTab = 0)),
                 const SizedBox(width: 8),
-                _ExpandableChip(
+                TabChip(
                     icon: Icons.new_releases,
                     label: "Latest",
                     selected: currentTab == 1,
                     onSelected: (value) => setState(() => currentTab = 1)),
                 const SizedBox(width: 8),
-                _ExpandableChip(
+                TabChip(
                     icon: Icons.filter_alt,
                     label: "Filter",
                     selected: currentTab == 2,
@@ -54,8 +52,8 @@ class _SearchPageState extends ConsumerState<SearchPage> {
               const SizedBox(height: 16),
               Expanded(
                   child: switch (currentTab) {
-                0 => const _PopularTab(),
-                1 => const _LatestTab(),
+                0 => const PopularTab(),
+                1 => const LatestTab(),
                 2 => _filterTab(),
                 _ => const SizedBox.shrink()
               })
@@ -416,257 +414,6 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                           title: Text(e.attributes.name["en"] ?? "Unknown genre tag")))
                       .toList())
             ]))
-        : _FilterResultPage(mangaFilterParams);
-  }
-}
-
-class _LatestTab extends ConsumerStatefulWidget {
-  const _LatestTab();
-
-  @override
-  ConsumerState<_LatestTab> createState() => _LatestTabState();
-}
-
-class _LatestTabState extends ConsumerState<_LatestTab> {
-  final pagingController =
-      PagingController<int, mgd.Manga>(firstPageKey: 0, invisibleItemsThreshold: 20);
-  final scrollController = ScrollController();
-
-  @override
-  void initState() {
-    super.initState();
-    pagingController.addPageRequestListener((pageKey) async {
-      final mangas = await ref.read(latestMangaProvider(pageKey).future);
-      if (mangas.length < 20) {
-        pagingController.appendLastPage(mangas);
-      } else {
-        pagingController.appendPage(mangas, pageKey + 20);
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    pagingController.dispose();
-    scrollController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return RefreshIndicator(
-        onRefresh: () async {
-          ref.invalidate(latestMangaProvider);
-          pagingController.refresh();
-        },
-        child: PagedGridView<int, mgd.Manga>(
-            scrollController: scrollController,
-            pagingController: pagingController,
-            showNewPageErrorIndicatorAsGridChild: false,
-            showNewPageProgressIndicatorAsGridChild: false,
-            showNoMoreItemsIndicatorAsGridChild: false,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                childAspectRatio: 2 / (sqrt(5) + 1),
-                crossAxisSpacing: 12,
-                mainAxisSpacing: 12),
-            builderDelegate: PagedChildBuilderDelegate<mgd.Manga>(
-                itemBuilder: (context, manga, index) => _MangaCard(manga))));
-  }
-}
-
-class _PopularTab extends ConsumerStatefulWidget {
-  const _PopularTab();
-
-  @override
-  ConsumerState<_PopularTab> createState() => _PopularTabState();
-}
-
-class _PopularTabState extends ConsumerState<_PopularTab> {
-  final pagingController =
-      PagingController<int, mgd.Manga>(firstPageKey: 0, invisibleItemsThreshold: 20);
-  final scrollController = ScrollController();
-
-  @override
-  void initState() {
-    super.initState();
-    pagingController.addPageRequestListener((pageKey) async {
-      final mangas = await ref.read(popularMangaProvider(pageKey).future);
-      if (mangas.length < 20) {
-        pagingController.appendLastPage(mangas);
-      } else {
-        pagingController.appendPage(mangas, pageKey + 20);
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    pagingController.dispose();
-    scrollController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return RefreshIndicator(
-        onRefresh: () async {
-          ref.invalidate(popularMangaProvider);
-          pagingController.refresh();
-        },
-        child: PagedGridView<int, mgd.Manga>(
-            key: const PageStorageKey("popular"),
-            scrollController: scrollController,
-            pagingController: pagingController,
-            showNewPageErrorIndicatorAsGridChild: false,
-            showNewPageProgressIndicatorAsGridChild: false,
-            showNoMoreItemsIndicatorAsGridChild: false,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                childAspectRatio: 2 / (sqrt(5) + 1),
-                crossAxisSpacing: 12,
-                mainAxisSpacing: 12),
-            builderDelegate: PagedChildBuilderDelegate<mgd.Manga>(
-                itemBuilder: (context, manga, index) => _MangaCard(manga))));
-  }
-}
-
-class _FilterResultPage extends ConsumerStatefulWidget {
-  final MangaFilterParams mangaFilterParams;
-  const _FilterResultPage(this.mangaFilterParams);
-
-  @override
-  ConsumerState<_FilterResultPage> createState() => _FilterResultPageState();
-}
-
-class _FilterResultPageState extends ConsumerState<_FilterResultPage> {
-  final pagingController =
-      PagingController<int, mgd.Manga>(firstPageKey: 0, invisibleItemsThreshold: 20);
-  final scrollController = ScrollController();
-
-  @override
-  void initState() {
-    super.initState();
-    pagingController.addPageRequestListener((pageKey) async {
-      final mangas =
-          await ref.read(filterMangaProvider((pageKey, widget.mangaFilterParams)).future);
-      if (mangas.length < 20) {
-        pagingController.appendLastPage(mangas);
-      } else {
-        pagingController.appendPage(mangas, pageKey + 20);
-      }
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-            automaticallyImplyLeading: false,
-            forceMaterialTransparency: true,
-            centerTitle: false,
-            title: const Text("Filter results")),
-        body: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: PagedGridView<int, mgd.Manga>(
-                pagingController: pagingController,
-                scrollController: scrollController,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    childAspectRatio: 2 / (sqrt(5) + 1),
-                    crossAxisSpacing: 12,
-                    mainAxisSpacing: 12),
-                builderDelegate: PagedChildBuilderDelegate<mgd.Manga>(
-                    itemBuilder: (context, manga, index) => _MangaCard(manga)))));
-  }
-}
-
-class _ExpandableChip extends StatelessWidget {
-  final String label;
-  final IconData icon;
-  final bool selected;
-  final void Function(bool) onSelected;
-  const _ExpandableChip(
-      {required this.selected,
-      required this.onSelected,
-      required this.label,
-      required this.icon});
-
-  @override
-  Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final theme = Theme.of(context);
-    final labelStyle =
-        theme.textTheme.labelLarge?.copyWith(color: theme.colorScheme.onPrimaryContainer);
-
-    return FilterChip(
-        showCheckmark: false,
-        labelStyle: labelStyle,
-        label: SizedBox(
-            width: screenWidth * 0.15,
-            child: AnimatedCrossFade(
-                firstChild: Row(
-                    mainAxisAlignment: MainAxisAlignment.center, children: [Text(label)]),
-                secondChild: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  Icon(icon, size: 16, color: labelStyle?.color),
-                  const SizedBox(width: 4),
-                  Text(label)
-                ]),
-                crossFadeState:
-                    !selected ? CrossFadeState.showFirst : CrossFadeState.showSecond,
-                duration: const Duration(milliseconds: 100))),
-        selected: selected,
-        onSelected: onSelected);
-  }
-}
-
-class _MangaCard extends ConsumerWidget {
-  final mgd.Manga manga;
-  const _MangaCard(this.manga);
-
-  Future<mgd.Cover?> _getCover(WidgetRef ref) async {
-    if (manga.coverArt == null) return null;
-    return ref.read(coverProvider(manga.coverArt!.id).future);
-  }
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final theme = Theme.of(context);
-
-    return FutureBuilder<mgd.Cover?>(
-        future: _getCover(ref),
-        builder: (context, snapshot) {
-          return GestureDetector(
-              onTap: () => context.go("/home/search/manga/${manga.id}"),
-              child: Container(
-                  clipBehavior: Clip.antiAlias,
-                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(12)),
-                  child: Stack(children: [
-                    Positioned.fill(
-                        child: CachedNetworkImage(
-                            imageUrl: snapshot.data?.url256 ?? "",
-                            errorWidget: (context, url, error) => const Placeholder(),
-                            fit: BoxFit.cover,
-                            imageRenderMethodForWeb: ImageRenderMethodForWeb.HttpGet)),
-                    Positioned.fill(
-                        child: Container(
-                            decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                    begin: Alignment.topCenter,
-                                    end: Alignment.bottomCenter,
-                                    colors: [
-                          Colors.transparent,
-                          theme.colorScheme.surface.withAlpha(222)
-                        ])))),
-                    Align(
-                        alignment: Alignment.bottomLeft,
-                        child: Padding(
-                            padding: const EdgeInsets.all(8),
-                            child: Text(manga.attributes.title["en"] ?? "Unknown title",
-                                style: theme.textTheme.titleSmall,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis)))
-                  ])));
-        });
+        : FilterResultTab(mangaFilterParams: mangaFilterParams);
   }
 }
